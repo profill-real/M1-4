@@ -12,6 +12,8 @@ class Pokemon:
         self.img = self.get_img()
         self.name = self.get_name()
         self.height = self.get_height()
+        self.hp = randint(200, 250)
+        self.power = randint(5, 10)
 
         Pokemon.pokemons[pokemon_trainer] = self
 
@@ -44,13 +46,46 @@ class Pokemon:
         else:
             return 0
 
+    def attack(self, enemy):
+        if isinstance(enemy, wizard): # Проверка на то, что enemy является типом данных Wizard (является экземпляром класса Волшебник)
+            chance = randint(1,5)
+            if chance == 1:
+                return "Покемон-волшебник применил щит в сражении"
+        if enemy.hp > self.power:
+            enemy.hp -= self.power
+            return f"Сражение @{self.pokemon_trainer} с @{enemy.pokemon_trainer}"
+        else:
+            enemy.hp = 0
+            return f"Победа @{self.pokemon_trainer} над @{enemy.pokemon_trainer}! "
+        
     # Метод класса для получения информации
     def info(self):
-        return f"Имя твоего покеомона: {self.name}. Высота покеомона: {self.height}"
+        return f"Имя твоего покеомона: {self.name};\n Высота покеомона: {self.height};\n HP(Очки здоровья): {self.hp};\n PP(Очки силы): {self.power}"
 
     # Метод класса для получения картинки покемона
     def show_img(self):
         return self.img
 
+class fighter(Pokemon):
+    def attack(self, enemy):
+        superpower = randint(5,15)
+        self.pp += superpower
+        result = super().attack(enemy)
+        self.pp -= superpower
+        return result + f"\nБоец применил супер-атаку силой:{superpower} PP"
+    def info(self):
+        return "Этот покомон - боец\n\n " + super.info()
 
+class wizard(Pokemon):
+    def info(self):
+        return "Этот покомон - волшебник\n\n " + super.info()
 
+if __name__ == '__main__':
+    wizard = wizard("username1")
+    fighter = fighter("username2")
+
+    print(wizard.info())
+    print()
+    print(fighter.info())
+    print()
+    print(fighter.attack(wizard))
