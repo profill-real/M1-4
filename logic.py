@@ -47,7 +47,7 @@ class Pokemon:
             return 0
 
     def attack(self, enemy):
-        if isinstance(enemy, wizard): # Проверка на то, что enemy является типом данных Wizard (является экземпляром класса Волшебник)
+        if isinstance(enemy, Wizard): # Проверка на то, что enemy является типом данных Wizard (является экземпляром класса Волшебник)
             chance = randint(1,5)
             if chance == 1:
                 return "Покемон-волшебник применил щит в сражении"
@@ -66,7 +66,7 @@ class Pokemon:
     def show_img(self):
         return self.img
 
-class fighter(Pokemon):
+class Fighter(Pokemon):
     def attack(self, enemy):
         superpower = randint(5,15)
         self.pp += superpower
@@ -76,16 +76,6 @@ class fighter(Pokemon):
     def info(self):
         return "Этот покомон - боец\n\n " + super.info()
 
-class wizard(Pokemon):
+class Wizard(Pokemon):
     def info(self):
         return "Этот покомон - волшебник\n\n " + super.info()
-
-if __name__ == '__main__':
-    wizard = wizard("username1")
-    fighter = fighter("username2")
-
-    print(wizard.info())
-    print()
-    print(fighter.info())
-    print()
-    print(fighter.attack(wizard))

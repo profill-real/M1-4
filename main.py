@@ -12,9 +12,9 @@ def start(message):
         if chance == 1:
             pokemon = Pokemon(message.from_user.username)
         elif chance == 2:
-            pokemon = wizard(message.from_user.username)
+            pokemon = Wizard(message.from_user.username)
         elif chance == 3:
-            pokemon = fighter(message.from_user.username)
+            pokemon = Fighter(message.from_user.username)
         bot.send_message(message.chat.id, pokemon.info())
         bot.send_photo(message.chat.id, pokemon.show_img())
     else:
@@ -34,6 +34,11 @@ def attack_pok(message):
     else:
             bot.send_message(message.chat.id, "Чтобы атаковать, нужно ответить на сообщения того, кого хочешь атаковать")
 
+@bot.message_handler(commands=['info'])
+def info(message):
+    if message.from_user.username in Pokemon.pokemons.keys():
+        pok = Pokemon.pokemons[message.from_user.username]
+        bot.send_message(message.chat.id, pok.info())
 
 bot.infinity_polling(none_stop=True)
 
