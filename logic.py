@@ -1,6 +1,7 @@
 from random import randint
+from datetime import datetime, timedelta
 import requests
-
+print(datetime.now())
 class Pokemon:
     pokemons = {}
     # Инициализация объекта (конструктор)
@@ -13,6 +14,7 @@ class Pokemon:
         self.name = self.get_name()
         self.height = self.get_height()
         self.hp = randint(200, 250)
+        self.last_feed_time = datetime.now()
         self.power = randint(5, 10)
 
         Pokemon.pokemons[pokemon_trainer] = self
@@ -58,6 +60,16 @@ class Pokemon:
             enemy.hp = 0
             return f"Победа @{self.pokemon_trainer} над @{enemy.pokemon_trainer}! "
         
+    def feed(self, feed_interval = 20, hp_increase = 10 ):
+        current_time = datetime.now()  
+        delta_time = timedelta(seconds=feed_interval)  
+        if (current_time - self.last_feed_time) > delta_time:
+            self.hp += hp_increase
+            self.last_feed_time = current_time
+            return f"Здоровье покемона увеличено. Текущее здоровье: {self.hp}"
+        else:
+            return f"Следующее время кормления покемона: {current_time-delta_time}"
+
     # Метод класса для получения информации
     def info(self):
         return f"Имя твоего покеомона: {self.name};\n Высота покеомона: {self.height};\n HP(Очки здоровья): {self.hp};\n PP(Очки силы): {self.power}"
@@ -67,6 +79,8 @@ class Pokemon:
         return self.img
 
 class Fighter(Pokemon):
+    def feed(self):
+        return super().feed(feed_interval = 20)
     def attack(self, enemy):
         superpower = randint(5,15)
         self.pp += superpower
@@ -77,5 +91,7 @@ class Fighter(Pokemon):
         return "Этот покомон - боец\n\n " + super.info()
 
 class Wizard(Pokemon):
+    def feed(self):
+        return super().feed(hp_increase = 10)
     def info(self):
         return "Этот покомон - волшебник\n\n " + super.info()
